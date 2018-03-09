@@ -3,8 +3,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+<<<<<<< HEAD
 *.lzw
 
+=======
+>>>>>>> 6372d855faa55e0e2f7c3ca6d9335d9f81ed81a1
 # User-specific files
 *.suo
 *.user
