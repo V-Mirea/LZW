@@ -55,7 +55,7 @@ std::string decompress(Iterator begin, Iterator end) {
 
   std::string w(1, *begin++);
   std::string result = w;
-  std::cout << result<<"???:::\n";
+  //std::cout << result<<"???:::\n";
   std::string entry;
   for ( ; begin != end; begin++) {
     int k = *begin;
@@ -189,6 +189,7 @@ void binaryIODemo(std::vector<int> compressed) {
    std::cout << " saved string : "<<s << "\n";
 }
 
+/*
 int main() {
   std::vector<int> compressed;
   compress("AAAAAAABBBBBB", std::back_inserter(compressed));
@@ -201,9 +202,28 @@ int main() {
 
   return 0;
 }
+*/
 
+std::string BlockIO(std::string filename) {
+   std::ifstream myfile (filename.c_str(), std::ios::binary);
+   std::streampos begin,end;
+   begin = myfile.tellg();
+   myfile.seekg (0, std::ios::end);
+   end = myfile.tellg();
+   std::streampos size = end-begin; //size of the file in bytes
+   myfile.seekg (0, std::ios::beg);
 
-/*
+   char * memblock = new char[size];
+   myfile.read (memblock, size); //read the entire file
+   memblock[size]='\0'; //add a terminator
+   myfile.close();
+
+   //check what's in the block
+   std::string str(memblock);
+
+   return str;
+}
+
 int main(int argc, char* argv[]) {
     // Arguments: lzw435.exe c/d [filename]
     if (argc != 3) {
@@ -211,12 +231,39 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::string file = argv[2];
     if (tolower(*argv[1]) == 'c') {
+        std::vector<int> compressed;
+        compress(BlockIO(file), std::back_inserter(compressed));
+        copy(compressed.begin(), compressed.end(), std::ostream_iterator<int>(std::cout, ", "));
+        std::cout << std::endl;
+
+        std::ofstream out(file + ".lzw");
+        copy(compressed.begin(), compressed.end(), std::ostream_iterator<int>(out, ", "));
 
     } else if (tolower(*argv[1]) == 'd') {
+        std::ifstream in(file);
+        std::vector<int> compressed;
 
+        int i;
+
+        while (in >> i) {
+            compressed.push_back(i);
+
+            if (in.peek() == ',')
+                in.ignore();
+        }
+
+        std::string decompressed = decompress(compressed.begin(), compressed.end());
+        std::cout << decompressed << std::endl;
+
+        std::ofstream out(file + '2');
+        out << decompressed;
     } else {
-
+        std::cout << "Invalid second parameter. Must be either c(ompress) or d(ecompress).";
+        return 1;
     }
 }
-*/
+
+
+
