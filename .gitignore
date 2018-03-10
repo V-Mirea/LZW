@@ -5,6 +5,8 @@
 
 *.lzw
 *.cbp
+*.layout
+*.depend
 
 # User-specific files
 *.suo
