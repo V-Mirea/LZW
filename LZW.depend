@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1520716608 source:c:\users\vlad\documents\codeblocks\algorithims projects\lzw\lzw435.cpp
+	<string>
+	<map>
+	<iostream>
+	<fstream>
+	<iterator>
+	<vector>
+	<sys/stat.h>
+

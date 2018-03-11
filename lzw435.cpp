@@ -34,6 +34,7 @@ Iterator compress(const std::string &uncompressed, Iterator result) {
       if (dictionary.size()<4096)
          dictionary[wc] = dictSize++;
       w = std::string(1, c);
+      std::cout << "\"" << w << "\": " << sizeof(w);
     }
   }
 
