@@ -5,10 +5,22 @@
 #include <iterator>
 #include <vector>
 #include <sys/stat.h>
+#include <cmath>
 
 /*
   This code is derived from LZW@RosettaCode for UA CS435
 */
+std::string compressInts(std::vector<int> code) {
+    std::string compressed;
+    int bits = 9; //Start with 9 bit numbers
+
+    for (int i : code) {
+        if (i >= pow(2, bits)) // If the number is too big, raise the bit amount by one to fit it
+            bits++;
+
+
+    }
+}
 
 // Compress a string to a list of output symbols.
 // The result will be written to the output iterator
@@ -81,7 +93,7 @@ std::string decompress(Iterator begin, Iterator end) {
 std::string blockIO(std::string fname) {
    std::ifstream in (fname.c_str(), std::ios::binary);
 
-   std::streampos begin = in.tellg(); // Set to the beginning
+   std::streampos begin = in.tellg(); // Set to the beginninggit rm -r --cached .
    in.seekg (0, std::ios::end); // Move to the end
    std::streampos end = in.tellg(); // Set to the end
 
