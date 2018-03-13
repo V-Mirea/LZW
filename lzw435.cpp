@@ -34,7 +34,6 @@ Iterator compress(const std::string &uncompressed, Iterator result) {
       if (dictionary.size()<4096)
          dictionary[wc] = dictSize++;
       w = std::string(1, c);
-      std::cout << "\"" << w << "\": " << sizeof(w);
     }
   }
 
@@ -138,8 +137,8 @@ int main(int argc, char* argv[]) {
             std::string decompressed = decompress(compressed.begin(), compressed.end());
             std::cout << decompressed << std::endl;
 
-            std::ofstream out(file + '2');
-            out << decompressed;
+            std::ofstream out(file + '2', std::ios::binary);
+            out.write(decompressed.c_str(), decompressed.size());
         } catch (std::exception e) {
             std::cout << e.what();
         }
