@@ -114,6 +114,13 @@ std::string blockIO(std::string fname) {
 }
 
 int main(int argc, char* argv[]) {
+
+    std::string contents = blockIO("LZW.exe");
+    std::ofstream out("LZW2.exe", std::ios::binary);
+    std::cout << contents;
+    out.write(contents.c_str(), contents.size());
+
+    /*
     // Arguments: lzw435.exe c/d [filename]
     if (argc != 3) {
         std::cout << "Incorrect number of arguments.";
@@ -158,6 +165,7 @@ int main(int argc, char* argv[]) {
         std::cout << "Invalid second parameter. Must be either c(ompress) or d(ecompress).";
         return 1;
     }
+    */
 }
 
 
