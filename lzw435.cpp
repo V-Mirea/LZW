@@ -143,7 +143,7 @@ std::string decompress(const std::string &compressed) {
     return result;
 }
 
-// From BlockIO.cpp from project 1
+// Slightly modified from BlockIO.cpp from project 1
 std::string blockIO(std::string fname) {
    std::ifstream in (fname.c_str(), std::ios::binary);
 
@@ -169,83 +169,6 @@ std::string blockIO(std::string fname) {
    return str;
 }
 
-
-
-/*
-void binaryIODemo(std::vector<int> compressed) {
-   int c = 69;
-   int bits = 9;
-   std::string p = int2BinaryString(c, bits);
-   std::cout << "c=" << c <<" : binary string="<<p<<"; back to code=" << binaryString2Int(p)<<"\n";
-
-   std::string bcode= "";
-   for (std::vector<int>::iterator it = compressed.begin() ; it != compressed.end(); ++it) {
-      if (*it<256)
-         bits = 8;
-      else
-         bits = 9;
-
-      bits = 12;
-      p = int2BinaryString(*it, bits);
-      std::cout << "c=" << *it <<" : binary string="<<p<<"; back to code=" << binaryString2Int(p)<<"\n";
-      bcode+=p;
-   }
-
-   //writing to file
-   std::cout << "string 2 save : "<<bcode << "\n";
-   std::string fileName = "example435.lzw";
-   std::ofstream myfile;
-   myfile.open(fileName.c_str(),  std::ios::binary);
-
-   std::string zeros = "00000000";
-   if (bcode.size()%8!=0) //make sure the length of the binary string is a multiple of 8
-      bcode += zeros.substr(0, 8-bcode.size()%8);
-
-   int b;
-   for (int i = 0; i < bcode.size(); i+=8) {
-      b = 1;
-      for (int j = 0; j < 8; j++) {
-         b = b<<1;
-         if (bcode.at(i+j) == '1')
-           b+=1;
-      }
-      char c = (char) (b & 255); //save the string byte by byte
-      myfile.write(&c, 1);
-   }
-   myfile.close();
-
-   //reading from a file
-   std::ifstream myfile2;
-   myfile2.open (fileName.c_str(),  std::ios::binary);
-
-   struct stat filestatus;
-   stat(fileName.c_str(), &filestatus );
-   long fsize = filestatus.st_size; //get the size of the file in bytes
-
-   char c2[fsize];
-   myfile2.read(c2, fsize);
-
-   std::string s = "";
-   long count = 0;
-   while(count<fsize) {
-      unsigned char uc =  (unsigned char) c2[count];
-      std::string p = ""; //a binary string
-      for (int j=0; j<8 && uc>0; j++) {
-		   if (uc%2==0)
-            p="0"+p;
-         else
-            p="1"+p;
-         uc=uc>>1;
-      }
-      p = zeros.substr(0, 8-p.size()) + p; //pad 0s to left if needed
-      s+= p;
-      count++;
-   }
-   myfile2.close();
-   std::cout << " saved string : "<<s << "\n";
-}
-*/
-
 int main(int argc, char* argv[]) {
     // Arguments: lzw435.exe c/d [filename]
     if (argc != 3) {
@@ -258,26 +181,10 @@ int main(int argc, char* argv[]) {
         try {
             std::string bcode = compress(blockIO(file));
 
-            /*
-            int bits = 9;
-            std::string bcode= "";
-            std::string p;
-            for (std::vector<int>::iterator it = compressed.begin() ; it != compressed.end(); ++it) {
-                if (*it >= pow(2, bits))
-                    bits++;
-                //bits = 12;
-
-                p = int2BinaryString(*it, bits);
-                bcode+=p;
-            }
-            */
-
-            //std::cout << bcode;
             std::string zeros = "00000000";
             if (bcode.size()%8!=0) //make sure the length of the binary string is a multiple of 8
                 bcode += zeros.substr(0, 8-bcode.size()%8);
 
-            //std::cout << bcode;
             std::ofstream myfile;
             myfile.open((file + ".lzw").c_str(),  std::ios::binary);
 
@@ -295,35 +202,12 @@ int main(int argc, char* argv[]) {
             }
             myfile.close();
 
-            //binaryIODemo(compressed);
-
-            //std::ofstream out(file + ".lzw");
-            //copy(compressed.begin(), compressed.end(), std::ostream_iterator<int>(out, ", ")); // Write the compressed string into the file
         } catch (std::exception e) {
             std::cout << e.what();
         }
 
     } else if (tolower(*argv[1]) == 'd') {
         try {
-            /*
-            std::ifstream in(file);
-            std::vector<int> compressed;
-
-            int i;
-
-            while (in >> i) {
-                compressed.push_back(i);
-
-                if (in.peek() == ',')
-                    in.ignore();
-            }
-
-            std::string decompressed = decompress(compressed.begin(), compressed.end());
-            std::cout << decompressed << std::endl;
-
-            std::ofstream out(file + '2', std::ios::binary);
-            out.write(decompressed.c_str(), decompressed.size());
-            */
 
             std::ifstream myfile2;
             myfile2.open (file.c_str(),  std::ios::binary);
@@ -356,7 +240,6 @@ int main(int argc, char* argv[]) {
             myfile2.close();
 
             std::string decompressed = decompress(code);
-            //std::cout << decompressed;
 
             std::ofstream out(file + '2', std::ios::binary);
             out.write(decompressed.c_str(), decompressed.size());
