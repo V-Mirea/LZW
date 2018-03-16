@@ -7,6 +7,8 @@
 *.cbp
 *.layout
 *.depend
+*.o
+*.exe
 
 # User-specific files
 *.suo

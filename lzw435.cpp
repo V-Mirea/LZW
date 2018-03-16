@@ -77,28 +77,26 @@ std::string decompress(Iterator begin, Iterator end) {
   return result;
 }
 
-// From BlockIO.cpp from project 1
-std::string blockIO(std::string fname) {
-   std::ifstream in (fname.c_str(), std::ios::binary);
+// Returns the contents of a file as a string
+std::string blockIO(std::string fileName) {
+    std::ifstream myfile2;
+    myfile2.open (fileName.c_str(),  std::ios::binary);
 
-   std::streampos begin = in.tellg(); // Set to the beginning
-   in.seekg (0, std::ios::end); // Move to the end
-   std::streampos end = in.tellg(); // Set to the end
+    struct stat filestatus;
+    stat(fileName.c_str(), &filestatus );
+    long fsize = filestatus.st_size; //get the size of the file in bytes
 
-   std::streampos size = end - begin; //size of the file in bytes
+    char c2[fsize];
+    myfile2.read(c2, fsize);
 
-   in.seekg (0, std::ios::beg); // Move back to the beginning
+    std::string s = "";
+    long count = 0;
+    while(count<fsize) {
+        s+= c2[count];
+        count++;
+    }
 
-   char* memblock = new char[size];
-   in.read (memblock, size); //read the entire file
-   memblock[size] = '\0'; //add a terminator
-
-   in.close();
-
-   //check what's in the block
-   std::string str(memblock);
-
-   return str;
+    return s;
 }
 
 int main(int argc, char* argv[]) {
@@ -137,7 +135,7 @@ int main(int argc, char* argv[]) {
             std::string decompressed = decompress(compressed.begin(), compressed.end());
             std::cout << decompressed << std::endl;
 
-            std::ofstream out(file + '2');
+            std::ofstream out(file.substr(0, file.find(".lzw")) + "2");
             out << decompressed;
         } catch (std::exception e) {
             std::cout << e.what();
