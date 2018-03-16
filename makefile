@@ -1,3 +1,3 @@
-all: lzw435.cpp
-	g++ -o lzw lzw435.cpp
+all: lzw435M.cpp
+	g++ -o lzw lzw435M.cpp
 
