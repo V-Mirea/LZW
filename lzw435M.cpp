@@ -157,8 +157,7 @@ std::string blockIO(std::string fileName) {
     std::string s = "";
     long count = 0;
     while(count<fsize) {
-        if (c2[count] != '\n')
-            s+= c2[count];
+        s+= c2[count];
         count++;
     }
 
